@@ -28,7 +28,7 @@ cd srb2kart-server-docker/
 docker build --tag srb2kart-server:latest .
 ```
 
-The build will clone the [STJr/Kart-Public](https://github.com/STJr/Kart-Public) repository and build the SRB2Kart executable, as well as download data files for SRB2Kart. Building the executable can take some time depending on your hardware.
+The build will clone the [STJr/Kart-Public](https://github.com/STJr/Kart-Public) repository and build the SRB2Kart executable, as well as download the data files for SRB2Kart. Building the executable can take some time depending on your hardware.
 
 ## License
 

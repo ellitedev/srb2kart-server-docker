@@ -1,7 +1,8 @@
 FROM alpine:3.12
 
-ARG SRB2KART_VERSION 1.3
-ARG SRB2KART_USER srb2kart
+# Ref: https://github.com/STJr/Kart-Public/releases
+ARG SRB2KART_VERSION=1.3
+ARG SRB2KART_USER=srb2kart
 
 # Ref: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=srb2kart-data
 RUN set -ex \
