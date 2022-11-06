@@ -1,8 +1,8 @@
 # Sonic Robo Blast 2 Kart Server
 
-[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/rwanyoike/srb2kart-server)](https://hub.docker.com/r/rwanyoike/srb2kart-server)
-[![Docker Image Version](https://img.shields.io/docker/v/rwanyoike/srb2kart-server)](https://hub.docker.com/r/rwanyoike/srb2kart-server)
-[![Docker Image Size](https://img.shields.io/docker/image-size/rwanyoike/srb2kart-server)](https://hub.docker.com/r/rwanyoike/srb2kart-server)
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/ellite/srb2kart-server)](https://hub.docker.com/r/ellite/srb2kart-server)
+[![Docker Image Version](https://img.shields.io/docker/v/ellite/srb2kart-server)](https://hub.docker.com/r/ellite/srb2kart-server)
+[![Docker Image Size](https://img.shields.io/docker/image-size/ellite/srb2kart-server)](https://hub.docker.com/r/ellite/srb2kart-server)
 
 > Containerized version of SRB2Kart.
 
@@ -17,7 +17,7 @@ Containerized version of [SRB2Kart](https://mb.srb2.org/showthread.php?t=43708),
 This will pull an image with SRB2Kart and start a dedicated netgame server on port `5029/udp`:
 
 ```bash
-docker run -it --name srb2kart -p 5029:5029/udp rwanyoike/srb2kart-server:latest
+docker run -it --name srb2kart -p 5029:5029/udp ellite/srb2kart-server:latest
 ```
 
 ### Data Volume
@@ -43,7 +43,7 @@ srb2kart-myserver
 docker run --rm -it --name srb2kart \
     -v <path to data directory>:/data \
     -p <port on host>:5029/udp \
-    rwanyoike/srb2kart-server:<version> -dedicated -file \
+    ellite/srb2kart-server:<version> -dedicated -file \
     addons/kl_xxx.pk3 \
     addons/kl_xxx.wad \
     addons/kr_xxx.pk3
@@ -72,11 +72,11 @@ Here's an example of how to run the container as a service on Linux with the hel
   RestartSec=5s
   ExecStartPre=/usr/bin/docker stop %n
   ExecStartPre=/usr/bin/docker rm %n
-  ExecStartPre=/usr/bin/docker pull rwanyoike/srb2kart-server:<version>
+  ExecStartPre=/usr/bin/docker pull ellite/srb2kart-server:<version>
   ExecStart=/usr/bin/docker run --rm --name %n \
       -v <path to data directory>:/data \
       -p <port on host>:5029/udp \
-      rwanyoike/srb2kart-server:<version>
+      ellite/srb2kart-server:<version>
 
   [Install]
   WantedBy=multi-user.target
@@ -91,14 +91,14 @@ Here's an example of how to run the container as a service on Linux with the hel
 ## Manual Build
 
 ```bash
-git clone https://github.com/rwanyoike/srb2kart-server-docker
+git clone https://github.com/ellite/srb2kart-server-docker
 cd srb2kart-server-docker/
 # Ref: https://github.com/STJr/Kart-Public/releases
 docker build --build-arg "SRB2KART_VERSION=<version>" \
     -t srb2kart-server:<version> .
 ```
 
-The build will clone the [STJr/Kart-Public](https://github.com/STJr/Kart-Public) repository and build the SRB2Kart executable, as well as download the data files (`/usr/share/games/SRB2Kart`) for SRB2Kart.
+The build will download the Source Code from a mirror (https://srb2kmods.ellite.dev/) and build the SRB2Kart executable, as well as download the data files (`/usr/share/games/SRB2Kart`) for SRB2Kart.
 
 ## License
 
