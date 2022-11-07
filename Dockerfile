@@ -2,7 +2,6 @@ FROM alpine:3.12
 
 # Ref: https://github.com/STJr/Kart-Public/releases
 ARG SRB2KART_VERSION=1.6
-ARG SRB2KART_USER=srb2kart
 
 # Ref: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=srb2kart-data
 RUN set -ex \
@@ -11,8 +10,8 @@ RUN set -ex \
     && curl -L -o /tmp/srb2kart-v${SRB2KART_VERSION//./}-Installer.zip https://srb2kmods.ellite.dev/srb2kinstaller_${SRB2KART_VERSION}.zip \
     && unzip -d /srb2kart-data /tmp/srb2kart-v${SRB2KART_VERSION//./}-Installer.zip \
     && find /srb2kart-data/mdls -type d -exec chmod 0755 {} \; \
-    && mkdir -p /usr/share/games \
-    && mv /srb2kart-data /usr/share/games/SRB2Kart \
+    && mkdir -p /usr/games \
+    && mv /srb2kart-data /usr/games/SRB2Kart \
     && apk del .build-deps
 
 # Ref: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=srb2kart
@@ -53,19 +52,19 @@ RUN set -ex \
     && rm -rf /srb2kart
 
 VOLUME /data
+VOLUME /config
+VOLUME /addons
+VOLUME /luafiles
 
-RUN adduser -D -u 10001 ${SRB2KART_USER} \
-    && ln -s /data /home/${SRB2KART_USER}/.srb2kart \
-    && chown ${SRB2KART_USER} /data
+RUN ln -sf /config/kartserv.cfg /usr/games/SRB2Kart/kartserv.cfg && ln -sf /addons /usr/games/SRB2Kart/addons && ln -sf /luafiles /usr/games/SRB2Kart/luafiles
 
-USER ${SRB2KART_USER}
-
-WORKDIR /usr/share/games/SRB2Kart
+WORKDIR /usr/games/SRB2Kart
 
 EXPOSE 5029/udp
 
+COPY srb2kart.sh /usr/bin/srb2kart.sh
+RUN chmod a+x /usr/bin/srb2kart.sh
+
 STOPSIGNAL SIGINT
 
-ENTRYPOINT ["srb2kart"]
-
-CMD ["-dedicated"]
+ENTRYPOINT ["srb2kart.sh"]
