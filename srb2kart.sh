@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 cd /usr/games/SRB2Kart || exit
 
