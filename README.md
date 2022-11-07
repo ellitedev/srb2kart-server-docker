@@ -20,34 +20,34 @@ This will pull an image with SRB2Kart and start a dedicated netgame server on po
 docker run -it --name srb2kart -p 5029:5029/udp ellite/srb2kart-server:latest
 ```
 
-### Data Volume
+### Volumes and persistent data
 
-The `~/.srb2kart` directory is symlinked to `/data` in the container. You can bind-mount a SRB2Kart directory (with configuration files, mods, etc.) on the host machine to the `/data` directory inside the container. For example:
+#### Addons
+  In order to load addons, bind the `/addons` volume to a host directory and copy them there.
+  ```bash
+  docker run -it --name srb2kart -p 5029:5029/udp -v /path/on/host/addons:/addons ellite/srb2kart-server:latest
+  ```
 
+#### Luafiles
+  Do your addons save configs/data in the `/luafiles` folder? Bind the `/luafiles` volume to a host directory.
+  ```bash
+  docker run -it --name srb2kart -p 5029:5029/udp -v /path/on/host/luafiles:/luafiles ellite/srb2kart-server:latest
+  ```
 
-```bash
-$ tree srb2kart-myserver/
-srb2kart-myserver
-├── addons
-│   ├── kl_xxx.pk3
-│   ├── kl_xxx.wad
-│   └── kr_xxx.pk3
-└── kartserv.cfg
+#### Config
+  In order to configure server variables, bind the `/config` volume to a host directory, create `kartserv.cfg`, and edit it.
+  ```bash
+  docker run -it --name srb2kart -p 5029:5029/udp -v /path/on/host/config:/config ellite/srb2kart-server:latest
+  ```
+  ```bash
+  sudo nano /path/on/host/config/kartserv.cfg
+  ```
 
-1 directory, 4 files
-```
-
-> This directory must be accessible to the user account that is used to run SRB2Kart inside the container. If your host machine is run under *nix OS, SRB2Kart uses the non-root account `10001:10001` (`group:id`, respectively).
-
-```bash
-docker run --rm -it --name srb2kart \
-    -v <path to data directory>:/data \
-    -p <port on host>:5029/udp \
-    ellite/srb2kart-server:<version> -dedicated -file \
-    addons/kl_xxx.pk3 \
-    addons/kl_xxx.wad \
-    addons/kr_xxx.pk3
-```
+#### Persistent Data
+  In order to persist data through server shutdowns, bind the `/data` volume to a host directory.
+  ```bash
+  docker run -it --name srb2kart -p 5029:5029/udp -v /path/on/host/data:/data ellite/srb2kart-server:latest
+  ```
 
 ### systemd
 
@@ -75,6 +75,9 @@ Here's an example of how to run the container as a service on Linux with the hel
   ExecStartPre=/usr/bin/docker pull ellite/srb2kart-server:<version>
   ExecStart=/usr/bin/docker run --rm --name %n \
       -v <path to data directory>:/data \
+      -v <path to config directory>:/config \
+      -v <path to addons directory>:/addons \
+      -v <path to luafiles directory>:/luafiles \
       -p <port on host>:5029/udp \
       ellite/srb2kart-server:<version>
 
