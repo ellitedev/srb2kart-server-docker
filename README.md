@@ -3,8 +3,7 @@
 [![Docker Image Version](https://img.shields.io/docker/v/ellite/srb2kart-server)](https://hub.docker.com/r/ellite/srb2kart-server)
 [![Docker Image Size](https://img.shields.io/docker/image-size/ellite/srb2kart-server)](https://hub.docker.com/r/ellite/srb2kart-server)
 
-> Containerized version of SRB2Kart.
-> This is a fork of [rwanyoikes Dockerfile](https://github.com/rwanyoike/srb2kart-server-docker)
+> Containerized version of SRB2Kart. This is a fork of [rwanyoikes Dockerfile](https://github.com/rwanyoike/srb2kart-server-docker)
 
 <p align="center">
   <img src="https://cdn.discordapp.com/attachments/298839130144505858/512450353124343808/unknown.png" width="100%" alt="SRB2Kart">
