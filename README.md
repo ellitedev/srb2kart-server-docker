@@ -96,7 +96,7 @@ Here's an example of how to run the container as a service on Linux with the hel
 ```bash
 git clone https://github.com/ellite/srb2kart-server-docker
 cd srb2kart-server-docker/
-# Ref: https://github.com/STJr/Kart-Public/releases
+# Ref for version numbers: https://github.com/STJr/Kart-Public/releases
 docker build --build-arg "SRB2KART_VERSION=<version>" \
     -t srb2kart-server:<version> .
 ```

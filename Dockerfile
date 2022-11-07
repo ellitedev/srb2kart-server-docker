@@ -9,6 +9,7 @@ RUN set -ex \
     && mkdir -p /srb2kart-data \
     && curl -L -o /tmp/srb2kart-v${SRB2KART_VERSION//./}-Installer.zip https://srb2kmods.ellite.dev/srb2kinstaller_${SRB2KART_VERSION}.zip \
     && unzip -d /srb2kart-data /tmp/srb2kart-v${SRB2KART_VERSION//./}-Installer.zip \
+    && rm /tmp/srb2kart-v${SRB2KART_VERSION//./}-Installer.zip \
     && find /srb2kart-data/mdls -type d -exec chmod 0755 {} \; \
     && mkdir -p /usr/games \
     && mv /srb2kart-data /usr/games/SRB2Kart \
