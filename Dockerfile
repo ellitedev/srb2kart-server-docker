@@ -52,11 +52,12 @@ RUN set -ex \
     && rm -rf /srb2kart
 
 VOLUME /data
+VOLUME /addons
 
 RUN adduser -D -u 1000 ${SRB2KART_USER} \
-    && mkdir /data \
-    && ln -s /data /home/${SRB2KART_USER}/.srb2kart \
-    && chown ${SRB2KART_USER} /data
+    && mkdir /data && mkdir /addons \
+    && chown ${SRB2KART_USER} /data && chown ${SRB2KART_USER} /addons  \
+    && ln -s /data /home/${SRB2KART_USER}/.srb2kart && ln -s /addons /home/${SRB2KART_USER}/.srb2kart/addons
 
 USER ${SRB2KART_USER}
 
