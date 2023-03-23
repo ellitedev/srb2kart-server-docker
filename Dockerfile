@@ -57,7 +57,7 @@ VOLUME /addons
 RUN adduser -D -u 1000 ${SRB2KART_USER} \
     && mkdir /data && mkdir /addons \
     && chown ${SRB2KART_USER} /data && chown ${SRB2KART_USER} /addons  \
-    && ln -s /data /home/${SRB2KART_USER}/.srb2kart && ln -s /addons /home/${SRB2KART_USER}/.srb2kart/addons
+    && ln -s /data /home/${SRB2KART_USER}/.srb2kart
 
 USER ${SRB2KART_USER}
 
@@ -67,6 +67,4 @@ EXPOSE 5029/udp
 
 STOPSIGNAL SIGINT
 
-ENTRYPOINT ["srb2kart"]
-
-CMD ["-dedicated"]
+CMD srb2kart -dedicated -file /addons/*.*
