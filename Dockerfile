@@ -54,6 +54,9 @@ RUN set -ex \
 VOLUME /data
 VOLUME /addons
 
+COPY srb2kart.sh /usr/bin/srb2kart.sh
+RUN chmod a+x /usr/bin/srb2kart.sh
+
 RUN adduser -D -u 1000 ${SRB2KART_USER} \
     && mkdir /data && mkdir /addons \
     && chown ${SRB2KART_USER} /data && chown ${SRB2KART_USER} /addons  \
@@ -67,4 +70,4 @@ EXPOSE 5029/udp
 
 STOPSIGNAL SIGINT
 
-CMD srb2kart -dedicated -file /addons/*.*
+ENTRYPOINT [ "srb2kart.sh" ]
