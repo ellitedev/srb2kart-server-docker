@@ -65,7 +65,7 @@ RUN chmod a+x /usr/bin/srb2kart.sh
 RUN adduser -D -u 1000 ${SRB2KART_USER} \
     && mkdir /data && mkdir /addons && mkdir /luafiles \
     && ln -s /data /home/${SRB2KART_USER}/.srb2kart && ln -s /luafiles /home/${SRB2KART_USER}/.srb2kart/luafiles \
-    && chown ${SRB2KART_USER} /data && chown ${SRB2KART_USER} /addons && chown /${SRB2KART_USER} /luafiles
+    && chown ${SRB2KART_USER} /data && chown ${SRB2KART_USER} /addons && chown ${SRB2KART_USER} /luafiles
 
 USER ${SRB2KART_USER}
 
