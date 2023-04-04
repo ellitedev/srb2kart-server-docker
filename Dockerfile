@@ -42,7 +42,10 @@ RUN set -ex \
         && make -j$(nproc) LINUX64=1 NOHW=1 NOGME=1) \
     && cp /srb2kart/bin/Linux64/Release/lsdl2srb2kart /usr/bin/srb2kart \
     && apk del .build-deps \
-    && apk add --no-cache\
+    && rm -rf /srb2kart 
+
+# Adding in game dependancies and nginx
+RUN apk add --no-cache \
         curl-dev \
         curl-static \
         libpng-dev \
@@ -51,27 +54,28 @@ RUN set -ex \
         sdl2-dev \
         sdl2-static \
         htop \
-        nano \
-        nginx \
-    && rm -rf /srb2kart
+        nginx 
 
+ # Volumes   
 VOLUME /data
 VOLUME /addons
-VOLUME /luafiles
+
+# Make all the folders and links
+RUN mkdir /data /addons /addons/repo /run/nginx \
+    && ln -s /addons/repo /var/lib/nginx/html \
+    && ln -s /data /root/.srb2kart
 
 COPY srb2kart.sh /usr/bin/srb2kart.sh
 RUN chmod a+x /usr/bin/srb2kart.sh
 
-RUN adduser -D -u 1000 ${SRB2KART_USER} \
-    && mkdir /data && mkdir /addons && mkdir /luafiles \
-    && ln -s /data /home/${SRB2KART_USER}/.srb2kart && ln -s /luafiles /home/${SRB2KART_USER}/.srb2kart/luafiles \
-    && chown ${SRB2KART_USER} /data && chown ${SRB2KART_USER} /addons && chown ${SRB2KART_USER} /luafiles
+COPY default.conf /etc/nginx/conf.d/default.conf
+RUN echo "1" > /run/nginx/nginx.pid
 
-USER ${SRB2KART_USER}
+WORKDIR /usr/games/SRB2Kart/
 
-WORKDIR /data
 EXPOSE 5029/udp
+EXPOSE 80/udp
 
 STOPSIGNAL SIGINT
 
-CMD [ "srb2kart.sh" ]
+ENTRYPOINT [ "srb2kart.sh" ]
