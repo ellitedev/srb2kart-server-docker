@@ -2,7 +2,6 @@ FROM alpine:3.12
 
 # Ref: https://github.com/STJr/Kart-Public/releases
 ARG SRB2KART_VERSION=1.6
-ARG SRB2KART_USER=srb2kart
 
 # Ref: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=srb2kart-data
 RUN set -ex \
@@ -34,7 +33,6 @@ RUN set -ex \
         sdl2_mixer-dev \
         sdl2-dev \
         sdl2-static \
-        upx \
         zlib-dev \
         zlib-static \
     && git clone --depth=1 -b v${SRB2KART_VERSION} https://github.com/STJr/Kart-Public.git /srb2kart \
@@ -56,14 +54,24 @@ RUN apk add --no-cache \
         htop \
         nginx 
 
- # Volumes   
+# Volumes   
 VOLUME /data
 VOLUME /addons
+VOLUME /luafiles
 
 # Make all the folders and links
-RUN mkdir /data /addons /addons/repo /run/nginx \
+RUN mkdir /data \
+    /addons \
+    /addons/loadfirst \
+    /addons/loadlast \
+    /addons/chars \
+    /addons/tracks \
+    /addons/repo \
+    /luafiles \
+    /run/nginx \
     && ln -s /addons/repo /var/lib/nginx/html \
-    && ln -s /data /root/.srb2kart
+    && ln -s /data /root/.srb2kart \
+    && ln -s /luafiles /root/.srb2kart/luafiles
 
 COPY srb2kart.sh /usr/bin/srb2kart.sh
 RUN chmod a+x /usr/bin/srb2kart.sh
