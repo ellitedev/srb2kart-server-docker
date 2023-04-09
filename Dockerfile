@@ -52,26 +52,26 @@ RUN apk add --no-cache \
         sdl2-dev \
         sdl2-static \
         htop \
-        nginx 
+        nginx \
+        zip
 
 # Volumes   
-VOLUME /data
-VOLUME /addons
-VOLUME /luafiles
+VOLUME /srb2kart
+VOLUME /mods
 
 # Make all the folders and links
-RUN mkdir /data \
-    /addons \
-    /addons/loadfirst \
-    /addons/loadlast \
-    /addons/chars \
-    /addons/tracks \
-    /addons/repo \
-    /luafiles \
-    /run/nginx \
-    && ln -s /addons/repo /var/lib/nginx/html \
-    && ln -s /data /root/.srb2kart \
-    && ln -s /luafiles /root/.srb2kart/luafiles
+RUN mkdir /srb2kart \
+        /srb2kart/mods/ \
+        /mods \
+        /mods/loadfirst \
+        /mods/loadlast \
+        /mods/chars \
+        /mods/tracks \
+        /mods/index \
+        /run/nginx \
+    && ln -s /mods/index /var/lib/nginx/html \
+    && ln -s /srb2kart /root/.srb2kart \
+    && ln -s /srb2kart/mods /mods
 
 COPY srb2kart.sh /usr/bin/srb2kart.sh
 RUN chmod a+x /usr/bin/srb2kart.sh
