@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  srb2kartserverdocker:
+    image: srb2kartserverdocker
+    build:
+      context: .
+      dockerfile: ./Dockerfile

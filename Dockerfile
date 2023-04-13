@@ -56,30 +56,19 @@ RUN apk add --no-cache \
         zip
 
 # Volumes   
-VOLUME /srb2kart
-VOLUME /mods
+VOLUME /kart
+VOLUME /kart/mods
 
 # Make all the folders and links
-RUN mkdir /srb2kart \
-        /srb2kart/mods/ \
-        /mods \
-        /mods/loadfirst \
-        /mods/loadlast \
-        /mods/chars \
-        /mods/tracks \
-        /mods/index \
-        /run/nginx \
-    && ln -s /mods/index /var/lib/nginx/html \
-    && ln -s /srb2kart /root/.srb2kart \
-    && ln -s /srb2kart/mods /mods
+RUN mkdir /run/nginx \
+    && ln -s /kart/mods/index /var/lib/nginx/html \
+    && ln -s /kart /root/.srb2kart
 
-COPY srb2kart.sh /usr/bin/srb2kart.sh
-RUN chmod a+x /usr/bin/srb2kart.sh
-
+COPY --chmod=755 srb2kart.sh /usr/bin/srb2kart.sh
 COPY default.conf /etc/nginx/conf.d/default.conf
 RUN echo "1" > /run/nginx/nginx.pid
 
-WORKDIR /usr/games/SRB2Kart/
+WORKDIR /usr/games/SRB2kart
 
 EXPOSE 5029/udp
 EXPOSE 80/udp

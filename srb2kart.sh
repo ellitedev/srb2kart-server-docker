@@ -1,6 +1,8 @@
-#!/usr/bin/sh
-KART_EXEC="srb2kart"
-KART_DIR="/srb2kart"
+#!/bin/sh
+#Thanks to Monitor#6336 for the script
+
+KART_EXEC="/usr/bin/srb2kart"
+KART_DIR="/kart"
 SERVER_NAME="spinOut"
 
 # find all the files in order
@@ -16,17 +18,18 @@ echo "Done"
 echo "Populating mod index"
 find $KART_DIR/mods/ -type f \( -not -path "$KART_DIR/mods/archive/*" \) -exec \
     ln -s '{}' $KART_DIR/mods/index/ ';'
-echo "Done"
-echo "STARTING NGINX"
 nginx
 echo "NGINX STARTED"
+wait
+echo "Done"
 
 # Create archive for download
 echo "Creating archive"
 ARCHIVE_NAME="$SERVER_NAME.zip"
-rm $KART_DIR/mods/index/$ARCHIVE_NAME
 echo $(find $KART_DIR/mods/index -type l) > $KART_DIR/mods/archive/mods.txt
-zip --junk-paths $KART_DIR/mods/archive/$ARCHIVE_NAME $(find $KART_DIR/mods/index -type l) &
+zip --junk-paths $KART_DIR/mods/archive/$ARCHIVE_NAME $(find $KART_DIR/mods/index -type l)
+ln $KART_DIR/mods/archive/$SERVER_NAME.zip $KART_DIR/mods/index/$SERVER_NAME.zip
+wait
 echo "Done"
 
 EXTRA_FILES="$LOAD_FIRST $CHARS $TRACKS $LOAD_LAST"
