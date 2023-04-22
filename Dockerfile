@@ -1,4 +1,4 @@
-FROM alpine:3.12
+FROM alpine:latest
 
 # Ref: https://github.com/STJr/Kart-Public/releases
 ARG SRB2KART_VERSION=1.6
@@ -32,7 +32,7 @@ RUN set -ex \
         openssl-libs-static \
         sdl2_mixer-dev \
         sdl2-dev \
-        sdl2-static \
+        sdl2 \
         zlib-dev \
         zlib-static \
     && git clone --depth=1 -b v${SRB2KART_VERSION} https://github.com/STJr/Kart-Public.git /srb2kart \
@@ -50,7 +50,7 @@ RUN apk add --no-cache \
         libpng-static \
         sdl2_mixer-dev \
         sdl2-dev \
-        sdl2-static \
+        sdl2 \
         htop \
         nginx \
         zip
@@ -60,8 +60,7 @@ VOLUME /kart
 VOLUME /kart/mods
 
 # Make all the folders and links
-RUN mkdir /run/nginx \
-    && ln -s /kart/mods/index /var/lib/nginx/html \
+RUN ln -s /kart/mods/index /var/lib/nginx/html \
     && ln -s /kart /root/.srb2kart
 
 COPY --chmod=755 srb2kart.sh /usr/bin/srb2kart.sh

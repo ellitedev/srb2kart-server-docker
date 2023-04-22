@@ -3,7 +3,7 @@
 
 KART_EXEC="/usr/bin/srb2kart"
 KART_DIR="/kart"
-SERVER_NAME="spinOut"
+SERVER_NAME="ModPack"
 
 # find all the files in order
 LOAD_FIRST="$(find $KART_DIR/mods/loadfirst -type f | sort)"
