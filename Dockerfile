@@ -11,7 +11,7 @@ RUN set -ex \
     && unzip -d /srb2kart-data /tmp/AssetsLinuxOnly.zip \
     && find /srb2kart-data/mdls -type d -exec chmod 0755 {} \; \
     && mkdir -p /usr/games \
-    && mv /srb2kart-data /usr/games/SRB2Kart \
+    && mv /srb2kart-data /usr/games/SRB2kart \
     && rm /tmp/AssetsLinuxOnly.zip \
     && apk del .build-deps
 
@@ -51,21 +51,20 @@ RUN apk add --no-cache \
         sdl2_mixer-dev \
         sdl2-dev \
         sdl2 \
-        htop \
         nginx \
         zip
 
 # Volumes   
 VOLUME /kart
-VOLUME /kart/mods
+
+# Copy over all the scripts
+COPY --chmod=755 srb2kart.sh /usr/bin/srb2kart.sh
+COPY default.conf /etc/nginx/http.d/default.conf
+
+RUN echo "1" > /run/nginx/nginx.pid
 
 # Make all the folders and links
-RUN ln -s /kart/mods/index /var/lib/nginx/html \
-    && ln -s /kart /root/.srb2kart
-
-COPY --chmod=755 srb2kart.sh /usr/bin/srb2kart.sh
-COPY default.conf /etc/nginx/conf.d/default.conf
-RUN echo "1" > /run/nginx/nginx.pid
+RUN ln -s /kart /root/.srb2kart
 
 WORKDIR /usr/games/SRB2kart
 

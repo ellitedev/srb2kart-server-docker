@@ -1,0 +1,11 @@
+version: '3.4'
+services:
+    srb2-kartserv:
+        container_name: spinOut
+        ports:
+            - '5029:5029/udp'
+            - '80:80'
+        volumes:
+            - '/home/ubuntu/kart:/kart'
+#            - '/home/ubuntu/kart/mods:/kart/mods'
+        image: jetcodesstuff/srb2-kartserv:latest 
