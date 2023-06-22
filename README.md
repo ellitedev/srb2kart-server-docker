@@ -1,8 +1,8 @@
 # Sonic Robo Blast 2 Kart Server
 
-[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/jetcodesstuff/srb2kart-server-docker)](https://hub.docker.com/r/jetcodesstuff/srb2kart-server-docker)
-[![Docker Image Version](https://img.shields.io/docker/v/jetcodesstuff/srb2kart-server-docker)](https://hub.docker.com/r/jetcodesstuff/srb2kart-server-docker)
-[![Docker Image Size](https://img.shields.io/docker/image-size/jetcodesstuff/srb2kart-server-docker)](https://hub.docker.com/r/jetcodesstuff/srb2kart-server-docker)
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/jetcodesstuff/srb2-kartserv)](https://hub.docker.com/r/jetcodesstuff/srb2-kartserv)
+[![Docker Image Version](https://img.shields.io/docker/v/jetcodesstuff/srb2-kartserv)](https://hub.docker.com/r/jetcodesstuff/srb2-kartserv)
+[![Docker Image Size](https://img.shields.io/docker/image-size/jetcodesstuff/srb2-kartserv)](https://hub.docker.com/r/jetcodesstuff/srb2-kartserv)
 
 > Containerized version of SRB2Kart.
 
@@ -17,18 +17,18 @@ Containerized version of [SRB2Kart](https://mb.srb2.org/showthread.php?t=43708),
 This will pull an image with SRB2Kart and start a dedicated netgame server on port `5029/udp`:
 
 ```bash
-docker run -it --name srb2kart -p 5029:5029/udp jetcodesstuff/srb2kart-server-docker:latest
+docker run -it --name srb2kart -p 5029:5029/udp jetcodesstuff/srb2-kartserv:latest
 ```
 
 ### Data Volume
 
-The `~/.srb2kart` directory is symlinked to `/data` in the container. You can bind-mount a SRB2Kart directory (with configuration files, mods, etc.) on the host machine to the `/data` directory inside the container. For example:
+The `~/.srb2kart` directory is symlinked to `/kart` in the container. You can bind-mount a SRB2Kart directory (with configuration files, mods, etc.) on the host machine to the `/kart` directory inside the container. For example:
 
 
 ```bash
 $ tree srb2kart-myserver/
 srb2kart-myserver
-├── addons
+├── mods
 │   ├── kl_xxx.pk3
 │   ├── kl_xxx.wad
 │   └── kr_xxx.pk3
@@ -41,12 +41,12 @@ srb2kart-myserver
 
 ```bash
 docker run --rm -it --name srb2kart \
-    -v <path to data directory>:/data \
+    -v <path to data directory>:/kart \
     -p <port on host>:5029/udp \
-    jetcodesstuff/srb2kart-server-docker:<version> -dedicated -file \
-    addons/kl_xxx.pk3 \
-    addons/kl_xxx.wad \
-    addons/kr_xxx.pk3
+    jetcodesstuff/srb2-kartserv:<version> -dedicated -file \
+    mods/kl_xxx.pk3 \
+    mods/kl_xxx.wad \
+    mods/kr_xxx.pk3
 ```
 
 ### systemd
@@ -72,11 +72,11 @@ Here's an example of how to run the container as a service on Linux with the hel
   RestartSec=5s
   ExecStartPre=/usr/bin/docker stop %n
   ExecStartPre=/usr/bin/docker rm %n
-  ExecStartPre=/usr/bin/docker pull jetcodesstuff/srb2kart-server-docker:<version>
+  ExecStartPre=/usr/bin/docker pull jetcodesstuff/srb2-kartserv:<version>
   ExecStart=/usr/bin/docker run --rm --name %n \
-      -v <path to data directory>:/data \
+      -v <path to data directory>:/kart \
       -p <port on host>:5029/udp \
-      jetcodesstuff/srb2kart-server-docker:<version>
+      jetcodesstuff/srb2-kartserv:<version>
 
   [Install]
   WantedBy=multi-user.target
@@ -91,8 +91,8 @@ Here's an example of how to run the container as a service on Linux with the hel
 ## Manual Build
 
 ```bash
-git clone https://github.com/jetcodesstuff/srb2kart-server-docker
-cd srb2kart-server-docker/
+git clone https://github.com/jetcodesstuff/srb2-kartserv
+cd srb2-kartserv/
 # Ref: https://github.com/STJr/Kart-Public/releases
 docker build --build-arg "SRB2KART_VERSION=<version>" \
     -t srb2kart-server:<version> .
