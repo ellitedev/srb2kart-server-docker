@@ -7,7 +7,7 @@ ARG SRB2KART_VERSION=1.6
 RUN set -ex \
     && apk add --no-cache --virtual .build-deps curl \
     && mkdir -p /srb2kart-data \
-    && curl -L -o /tmp/srb2kart-v${SRB2KART_VERSION//./}-Installer.zip https://srb2kmods.ellite.dev/srb2kinstaller_${SRB2KART_VERSION}.zip \
+    && curl -L -o /tmp/srb2kart-v${SRB2KART_VERSION//./}-Installer.zip https://srb2k.ellite.dev/mods/srb2kinstaller_${SRB2KART_VERSION}.zip \
     && unzip -d /srb2kart-data /tmp/srb2kart-v${SRB2KART_VERSION//./}-Installer.zip \
     && rm /tmp/srb2kart-v${SRB2KART_VERSION//./}-Installer.zip \
     && find /srb2kart-data/mdls -type d -exec chmod 0755 {} \; \
