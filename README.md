@@ -100,7 +100,7 @@ docker build --build-arg "SRB2KART_VERSION=<version>" \
     -t srb2kart-server:<version> .
 ```
 
-The build will download the Source Code from a mirror (https://srb2kmods.ellite.dev/) and build the SRB2Kart executable, as well as download the data files (`/usr/share/games/SRB2Kart`) for SRB2Kart.
+The build will download the Source Code from a [mirror](https://srb2k.ellite.dev/mods/) and build the SRB2Kart executable, as well as download the data files (`/usr/share/games/SRB2Kart`) for SRB2Kart.
 
 ## License
 
