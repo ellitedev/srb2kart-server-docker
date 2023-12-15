@@ -1,10 +1,9 @@
 # Sonic Robo Blast 2 Kart Server
 
-[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/jetcodesstuff/srb2-kartserv)](https://hub.docker.com/r/jetcodesstuff/srb2-kartserv)
-[![Docker Image Version](https://img.shields.io/docker/v/jetcodesstuff/srb2-kartserv)](https://hub.docker.com/r/jetcodesstuff/srb2-kartserv)
-[![Docker Image Size](https://img.shields.io/docker/image-size/jetcodesstuff/srb2-kartserv)](https://hub.docker.com/r/jetcodesstuff/srb2-kartserv)
+[![Docker Image Version](https://img.shields.io/docker/v/ellite/srb2kart-server)](https://hub.docker.com/r/ellite/srb2kart-server)
+[![Docker Image Size](https://img.shields.io/docker/image-size/ellite/srb2kart-server)](https://hub.docker.com/r/ellite/srb2kart-server)
 
-> Containerized version of SRB2Kart.
+> Containerized version of SRB2Kart. This is a fork of [rwanyoikes Dockerfile](https://github.com/rwanyoike/srb2kart-server-docker)
 
 <p align="center">
   <img src="https://cdn.discordapp.com/attachments/298839130144505858/512450353124343808/unknown.png" width="100%" alt="SRB2Kart">
@@ -24,6 +23,11 @@ docker run -it --name srb2kart -p 5029:5029/udp jetcodesstuff/srb2-kartserv:late
 
 The `~/.srb2kart` directory is symlinked to `/kart` in the container. You can bind-mount a SRB2Kart directory (with configuration files, mods, etc.) on the host machine to the `/kart` directory inside the container. For example:
 
+#### Addons
+  In order to load addons, bind the `/addons` volume to a host directory and copy them there.
+  ```bash
+  docker run -it --name srb2kart -p 5029:5029/udp -v /path/on/host/addons:/addons ellite/srb2kart-server:latest
+  ```
 
 ```bash
 $ tree srb2kart-myserver/
@@ -91,14 +95,14 @@ Here's an example of how to run the container as a service on Linux with the hel
 ## Manual Build
 
 ```bash
-git clone https://github.com/jetcodesstuff/srb2-kartserv
-cd srb2-kartserv/
-# Ref: https://github.com/STJr/Kart-Public/releases
+git clone https://github.com/ellite/srb2kart-server-docker
+cd srb2kart-server-docker/
+# Ref for version numbers: https://github.com/STJr/Kart-Public/releases
 docker build --build-arg "SRB2KART_VERSION=<version>" \
     -t srb2kart-server:<version> .
 ```
 
-The build will clone the [STJr/Kart-Public](https://github.com/STJr/Kart-Public) repository and build the SRB2Kart executable, as well as download the data files (`/usr/share/games/SRB2Kart`) for SRB2Kart.
+The build will download the Source Code and build the SRB2Kart executable, as well as download the data files (`/usr/share/games/SRB2Kart`) for SRB2Kart.
 
 ## License
 

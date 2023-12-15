@@ -35,6 +35,7 @@ RUN set -ex \
         sdl2 \
         zlib-dev \
         zlib-static \
+    && mkdir -p /data \
     && git clone --depth=1 -b v${SRB2KART_VERSION} https://github.com/STJr/Kart-Public.git /srb2kart \
     && (cd /srb2kart/src \
         && make -j$(nproc) LINUX64=1 NOHW=1 NOGME=1) \
@@ -71,6 +72,7 @@ WORKDIR /usr/games/SRB2kart
 EXPOSE 5029/udp
 EXPOSE 80/udp
 
-STOPSIGNAL SIGINT
+COPY srb2kart.sh /usr/bin/srb2kart.sh
+RUN chmod a+x /usr/bin/srb2kart.sh
 
 ENTRYPOINT [ "srb2kart.sh" ]
