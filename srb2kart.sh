@@ -2,10 +2,35 @@
 #Thanks to Monitor#6336 for the script
 
 KART_EXEC="/usr/bin/srb2kart"
+ROOT_DIR="/kart"
 MODS_DIR="/kart/mods"
 SERVER_NAME="ModPack"
 
 mkdir -p -m 755 $MODS_DIR/archive $MODS_DIR/chars $MODS_DIR/repo $MODS_DIR/loadfirst $MODS_DIR/loadlast $MODS_DIR/tracks
+
+# if kartserv.cfg doesn't exist, touch it
+if [ ! -f $ROOT_DIR/kartserv.cfg ]; then
+    echo "kartserv.cfg not found, creating it"
+    touch $ROOT_DIR/kartserv.cfg
+
+    #  check if it was created, if not, exit
+    if [ ! -f $ROOT_DIR/kartserv.cfg ]; then
+        echo "kartserv.cfg could not be created, exiting"
+        exit 1
+    fi
+fi
+
+# if kartserv.cfg has the wrong permissions, fix it, srb2k needs to be able to execute it
+if [ ! -x $ROOT_DIR/kartserv.cfg ]; then
+    echo "kartserv.cfg has the wrong permissions, fixing it"
+    chmod 755 $ROOT_DIR/kartserv.cfg
+
+    #  check if it was fixed, if not, exit
+    if [ ! -x $ROOT_DIR/kartserv.cfg ]; then
+        echo "kartserv.cfg could not be fixed, exiting"
+        exit 1
+    fi
+fi
 
 # find all the files in order
 LOAD_FIRST="$(find $MODS_DIR/loadfirst -type f | sort)"
@@ -33,4 +58,4 @@ wait
 echo "Done"
 
 EXTRA_FILES="$LOAD_FIRST $CHARS $TRACKS $LOAD_LAST"
-$KART_EXEC -dedicated -file $EXTRA_FILES
+$KART_EXEC -dedicated -config $ROOT_DIR/kartserv.cfg -file $EXTRA_FILES
