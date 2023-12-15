@@ -16,10 +16,12 @@ Containerized version of [SRB2Kart](https://mb.srb2.org/showthread.php?t=43708),
 This will pull an image with SRB2Kart and start a dedicated netgame server on port `5029/udp`:
 
 ```bash
-docker run -it --name srb2kart -p 5029:5029/udp ellite/srb2kart-server:latest
+docker run -it --name srb2kart -p 5029:5029/udp jetcodesstuff/srb2-kartserv:latest
 ```
 
-### Volumes and persistent data
+### Data Volume
+
+The `~/.srb2kart` directory is symlinked to `/kart` in the container. You can bind-mount a SRB2Kart directory (with configuration files, mods, etc.) on the host machine to the `/kart` directory inside the container. For example:
 
 #### Addons
   In order to load addons, bind the `/addons` volume to a host directory and copy them there.
@@ -27,26 +29,29 @@ docker run -it --name srb2kart -p 5029:5029/udp ellite/srb2kart-server:latest
   docker run -it --name srb2kart -p 5029:5029/udp -v /path/on/host/addons:/addons ellite/srb2kart-server:latest
   ```
 
-#### Luafiles
-  Do your addons save configs/data in the `/luafiles` folder? Bind the `/luafiles` volume to a host directory.
-  ```bash
-  docker run -it --name srb2kart -p 5029:5029/udp -v /path/on/host/luafiles:/luafiles ellite/srb2kart-server:latest
-  ```
+```bash
+$ tree srb2kart-myserver/
+srb2kart-myserver
+├── mods
+│   ├── kl_xxx.pk3
+│   ├── kl_xxx.wad
+│   └── kr_xxx.pk3
+└── kartserv.cfg
 
-#### Config
-  In order to configure server variables, bind the `/config` volume to a host directory, create `kartserv.cfg`, and edit it.
-  ```bash
-  docker run -it --name srb2kart -p 5029:5029/udp -v /path/on/host/config:/config ellite/srb2kart-server:latest
-  ```
-  ```bash
-  sudo nano /path/on/host/config/kartserv.cfg
-  ```
+1 directory, 4 files
+```
 
-#### Persistent Data
-  In order to persist data through server shutdowns, bind the `/data` volume to a host directory.
-  ```bash
-  docker run -it --name srb2kart -p 5029:5029/udp -v /path/on/host/data:/data ellite/srb2kart-server:latest
-  ```
+> This directory must be accessible to the user account that is used to run SRB2Kart inside the container. If your host machine is run under *nix OS, SRB2Kart uses the non-root account `1000:1000` (`group:id`, respectively).
+
+```bash
+docker run --rm -it --name srb2kart \
+    -v <path to data directory>:/kart \
+    -p <port on host>:5029/udp \
+    jetcodesstuff/srb2-kartserv:<version> -dedicated -file \
+    mods/kl_xxx.pk3 \
+    mods/kl_xxx.wad \
+    mods/kr_xxx.pk3
+```
 
 ### systemd
 
@@ -71,14 +76,11 @@ Here's an example of how to run the container as a service on Linux with the hel
   RestartSec=5s
   ExecStartPre=/usr/bin/docker stop %n
   ExecStartPre=/usr/bin/docker rm %n
-  ExecStartPre=/usr/bin/docker pull ellite/srb2kart-server:<version>
+  ExecStartPre=/usr/bin/docker pull jetcodesstuff/srb2-kartserv:<version>
   ExecStart=/usr/bin/docker run --rm --name %n \
-      -v <path to data directory>:/data \
-      -v <path to config directory>:/config \
-      -v <path to addons directory>:/addons \
-      -v <path to luafiles directory>:/luafiles \
+      -v <path to data directory>:/kart \
       -p <port on host>:5029/udp \
-      ellite/srb2kart-server:<version>
+      jetcodesstuff/srb2-kartserv:<version>
 
   [Install]
   WantedBy=multi-user.target
@@ -100,7 +102,7 @@ docker build --build-arg "SRB2KART_VERSION=<version>" \
     -t srb2kart-server:<version> .
 ```
 
-The build will download the Source Code from a [mirror](https://srb2k.ellite.dev/mods/) and build the SRB2Kart executable, as well as download the data files (`/usr/share/games/SRB2Kart`) for SRB2Kart.
+The build will download the Source Code and build the SRB2Kart executable, as well as download the data files (`/usr/share/games/SRB2Kart`) for SRB2Kart.
 
 ## License
 
